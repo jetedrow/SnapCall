@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SnapCall.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,8 @@ namespace SnapCall
 	public class Hand
 	{
 		public List<Card> Cards { get; set; }
+
+		private static readonly List<int> fiveHighStraight = new int[] { 3, 2, 1, 0, 12 }.ToList();
 
 		public Hand()
 		{
@@ -38,6 +41,21 @@ namespace SnapCall
 					}
 				}
 			}
+		}
+
+		public static Hand Parse(string hand)
+		{
+			string curHand = new string(hand.ToUpper().ToCharArray().Where(c => !char.IsWhiteSpace(c)).ToArray());
+			if (curHand.Length % 2 == 1) throw new ArgumentException("Invalid hand length.");
+			
+			var h = new Hand();
+
+			for (int i = 0; i < curHand.Length/2; i++)
+			{
+				h.Cards.Add(new Card(curHand.Substring(i * 2, 2)));
+			}
+
+			return h;
 		}
 
 		public void PrintColoredCards(string end = "")
@@ -111,7 +129,14 @@ namespace SnapCall
 				if (straight && flush)
 				{
 					strength.HandRanking = HandRanking.StraightFlush;
-					strength.Kickers = Cards.Select(card => (int)card.Rank).Reverse().ToList();
+					if (rankProduct == 8610) // Five-high straight
+					{
+						strength.Kickers = fiveHighStraight;
+					}
+					else
+					{
+						strength.Kickers = Cards.Select(card => (int)card.Rank).Reverse().ToList();
+					}
 				}
 				else if (fourOfAKind >= 0)
 				{
@@ -137,9 +162,14 @@ namespace SnapCall
 				else if (straight)
 				{
 					strength.HandRanking = HandRanking.Straight;
-					strength.Kickers.AddRange(Cards
-						.Select(card => (int)card.Rank)
-						.Reverse());
+					if (rankProduct == 8610) // Five-high straight
+					{
+						strength.Kickers = fiveHighStraight;
+					}
+					else
+					{
+						strength.Kickers = Cards.Select(card => (int)card.Rank).Reverse().ToList();
+					}
 				}
 				else if (threeOfAKind >= 0)
 				{

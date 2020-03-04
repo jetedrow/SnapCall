@@ -26,7 +26,7 @@ namespace SnapCall
 			return this.Rank == other.Rank && this.Suit == other.Suit;
 		}
 
-		public int GetHashCode(Card c)
+		public static int GetHashCode(Card c)
 		{
 			return c.PrimeRank * c.PrimeSuit;
 		}

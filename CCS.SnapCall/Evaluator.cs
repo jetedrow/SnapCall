@@ -108,7 +108,7 @@ namespace SnapCall
 
 		private void GenerateFiveCardTable()
 		{
-			var sourceSet = Enumerable.Range(0, 52).ToList();
+			var sourceSet = Enumerable.Range(1, 52).ToList();
 			var combinations = new Combinatorics.Collections.Combinations<int>(sourceSet, 5);
 
 			// Generate all possible 5 card hand bitmaps
