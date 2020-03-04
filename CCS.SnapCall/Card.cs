@@ -35,7 +35,7 @@ namespace SnapCall
 		{
 			var chars = s.ToUpper().ToCharArray();
 			if (chars.Length != 2) throw new ArgumentException("Card string must be length 2");
-			switch (chars[0].ToUpper())
+			switch (chars[0])
 			{
 				case '2': this.Rank = Rank.Two; break;
 				case '3': this.Rank = Rank.Three; break;
